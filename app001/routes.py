@@ -1,7 +1,7 @@
-from flask import render_template, request, redirect, url_for, session
+from flask import render_template, request, redirect, url_for, session, flash
 import re
 from app001 import app
-from app001.models import User
+from app001.models import User, Post
 
 
 @app.route('/login/', methods=['GET', 'POST'])
@@ -51,7 +51,7 @@ def register():
             msg = 'That email is already exist'
         else:
             User.useradd(username, password, email)
-            msg = 'Create User Success!'
+            flash('Create User Success!')
             return redirect(url_for('login'))
 
     return render_template('register.html', msg=msg)
@@ -69,14 +69,17 @@ def logout():
 @app.route('/home')
 def home():
     if 'loggedin' in session:
-        return render_template('home.html', username=session['username'])
+
+        posts = Post.get_Posts(session['id'])
+
+        return render_template('home.html', username=session['username'], posts=posts)
     return redirect(url_for('login'))
 
 
 @app.route('/profile')
 def profile():
     if 'loggedin' in session:
-        account = User.get_information([session['id']])
-        return render_template('profile.html', account=account)
+        user = User.get_information([session['id']])
+        return render_template('profile.html', user=user)
 
     return redirect(url_for('login'))

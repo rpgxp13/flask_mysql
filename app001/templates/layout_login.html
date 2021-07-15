@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta charset="utf-8">
+    <title>{% block title %}{% endblock %}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.1/css/all.css">
+  </head>
+  <body>
+    <div class="login">
+      {% block content %}{% endblock %}
+    </div>
+    {%with messages = get_flashed_messages()%}
+      {%if messages %}
+        <script type="text/javascript">
+          alert("{{messages[-1]}}");
+        </script>
+      {%endif%}
+    {%endwith%}
+  </body>
+</html>
