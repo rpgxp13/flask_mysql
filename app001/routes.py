@@ -83,3 +83,11 @@ def profile():
         return render_template('profile.html', user=user)
 
     return redirect(url_for('login'))
+
+
+@app.route('/')
+def root():
+    if 'loggedin' in session:
+        redirect(url_for('home'))
+    else:
+        redirect(url_for('login'))
