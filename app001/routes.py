@@ -1,18 +1,7 @@
 from flask import render_template, request, redirect, url_for, session
-from flask_mysqldb import MySQL
-import MySQLdb.cursors
 import re
 from app001 import app
-
-app.secret_key = 'this is secret key'
-
-app.config['MYSQL_HOST'] = 'myflaskdb.ch8eewmwhrfk.us-east-2.rds.amazonaws.com'
-app.config['MYSQL_USER'] = 'admin'
-app.config['MYSQL_PASSWORD'] = '134679as!#'
-app.config['MYSQL_DB'] = 'myFlaskApp'
-app.config['MYSQL_PORT'] = 3306
-
-mysql = MySQL(app)
+from app001.models import User
 
 
 @app.route('/login/', methods=['GET', 'POST'])
@@ -22,17 +11,39 @@ def login():
         username = request.form['username']
         password = request.form['password']
 
-        cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
-        cursor.execute('SELECT * FROM accounts WHERE username = %s AND password = %s', (username, password))
-
-        account = cursor.fetchone()
+        account = User.login_check(username, password)
 
         if account:
             session['loggedin'] = True
             session['id'] = account['id']
             session['username'] = account['username']
-            return 'Logged in successfully!'
+            return redirect(url_for('home'))
         else:
             msg = 'Incorrect username or password!'
 
     return render_template('login.html', msg=msg)
+
+
+@app.route('/logout')
+def logout():
+    session.pop('loggedin', None)
+    session.pop('id', None)
+    session.pop('username', None)
+
+    return redirect(url_for('login'))
+
+
+@app.route('/home')
+def home():
+    if 'loggedin' in session:
+        return render_template('home.html', username=session['username'])
+    return redirect(url_for('login'))
+
+
+@app.route('/profile')
+def profile():
+    if 'loggedin' in session:
+        account = User.get_information([session['id']])
+        return render_template('profile.html', account=account)
+
+    return redirect(url_for('login'))
