@@ -66,7 +66,7 @@ def logout():
     return redirect(url_for('login'))
 
 
-@app.route('/home')
+@app.route('/home', methods=['GET', 'POST'])
 def home():
     if 'loggedin' in session:
 
