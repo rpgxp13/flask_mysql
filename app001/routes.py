@@ -11,9 +11,9 @@ def login():
         username = request.form['username']
         password = request.form['password']
 
-        account = User.login_check(username, password)
+        account, check_password = User.login_check(username, password)
 
-        if account:
+        if check_password:
             session['loggedin'] = True
             session['id'] = account['id']
             session['username'] = account['username']
@@ -29,6 +29,32 @@ def login():
         return redirect(url_for('home'))
 
     return render_template('login.html', msg=msg)
+
+
+@app.route('/register', methods=['GET', 'POST'])
+def register():
+    msg = 'Creating User Page'
+
+    if 'loggedin' in session:
+        return redirect(url_for('home'))
+
+    if request.method == 'POST' and 'username' in request.form and 'password' in request.form and 'email' in request.form:
+        username = request.form['username']
+        password = request.form['password']
+        email = request.form['email']
+        username_already_exist = User.check_username_exist(username)
+        email_already_exist = User.check_email_exist(email)
+
+        if username_already_exist:
+            msg = 'That username is already exist'
+        elif email_already_exist:
+            msg = 'That email is already exist'
+        else:
+            User.useradd(username, password, email)
+            msg = 'Create User Success!'
+            return redirect(url_for('login'))
+
+    return render_template('register.html', msg=msg)
 
 
 @app.route('/logout')
