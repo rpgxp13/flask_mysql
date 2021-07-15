@@ -26,4 +26,9 @@ class User():
         account = cursor.fetchone()
         return account
 
+    def update_fromip(fromip, id):
+        cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+        cursor.execute('UPDATE `myFlaskApp`.`accounts` SET `fromip` = %s WEHERE `id` = %s', (fromip, id))
+        mysql.connection.commit()
+
 

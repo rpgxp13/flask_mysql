@@ -17,9 +17,16 @@ def login():
             session['loggedin'] = True
             session['id'] = account['id']
             session['username'] = account['username']
+
+            fromip = request.environ.get('HTTP_X_REAL_IP', request.remote_addr)
+            User.update_fromip(fromip, account['id'])
+
             return redirect(url_for('home'))
         else:
             msg = 'Incorrect username or password!'
+
+    if 'loggedin' in session:
+        return redirect(url_for('home'))
 
     return render_template('login.html', msg=msg)
 
