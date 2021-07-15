@@ -88,6 +88,6 @@ def profile():
 @app.route('/')
 def root():
     if 'loggedin' in session:
-        redirect(url_for('home'))
+        return redirect(url_for('home'))
     else:
-        redirect(url_for('login'))
+        return redirect(url_for('login'))
