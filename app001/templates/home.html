@@ -6,6 +6,9 @@
     <h2>Home Page</h2>
     <p>Welcome back, {{ username }}!</p>
     {% for post in posts %}
-        <p>{{ post['title'] }}</p>
+        <a href="{{ url_for('postviewer', id=post['id']) }}">
+            <p>{{ post['title'] }}</p>
+        </a>
+
     {% endfor %}
 {% endblock %}

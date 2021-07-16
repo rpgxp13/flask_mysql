@@ -70,10 +70,22 @@ def logout():
 def home():
     if 'loggedin' in session:
 
-        posts = Post.get_Posts(session['id'])
+        posts = Post.get_Posts_title(session['id'])
 
         return render_template('home.html', username=session['username'], posts=posts)
     return redirect(url_for('login'))
+
+
+@app.route('/post/<int:id>', methods=['GET', 'POST'])
+def postviewer(id):
+    if 'loggedin' in session:
+
+        post = Post.get_Post(id)
+
+        return render_template('postpage.html', post=post, user=session)
+
+    return redirect('login')
+
 
 
 @app.route('/profile')

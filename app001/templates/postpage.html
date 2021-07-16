@@ -1,0 +1,11 @@
+{% extends 'layout.html' %}
+
+{% block title %}Post{% endblock %}
+
+{% block content %}
+    <h2>{{ post['title'] }}</h2>
+    <p>{{ post['content'] }}</p>
+    {% if post['user_id'] == user['id'] %}
+    <p>This Post Author is {{ user['username'] }}</p>
+    {% endif %}
+{% endblock %}

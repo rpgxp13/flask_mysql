@@ -58,11 +58,17 @@ class User():
 
 
 class Post():
-    def get_Posts(user_id):
+    def get_Posts_title(user_id):
         cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
         cursor.execute('SELECT * FROM post WHERE user_id = %s', str(user_id))
         posts = cursor.fetchall()
         return posts
+
+    def get_Post(post_id):
+        cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+        cursor.execute('SELECT * FROM post WHERE id = %s', str(post_id))
+        post = cursor.fetchone()
+        return post
 
 
 
