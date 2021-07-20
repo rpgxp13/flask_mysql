@@ -70,7 +70,7 @@ def logout():
 def home():
     if 'loggedin' in session:
 
-        posts = Post.get_Posts_title(session['id'])
+        posts = Post.get_Posts_With_Userid(session['id'])
 
         return render_template('home.html', username=session['username'], posts=posts)
     return redirect(url_for('login'))
@@ -103,3 +103,12 @@ def root():
         return redirect(url_for('home'))
     else:
         return redirect(url_for('login'))
+
+
+@app.route('/testpage')
+def testpage():
+    if 'loggedin' in session:
+        posts = Post.get_Posts_All()
+        print(posts)
+
+    return render_template('test.html', posts=posts)

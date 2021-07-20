@@ -37,7 +37,6 @@ class User():
         mysql.connection.commit()
 
     def useradd(username, password, email):
-        # bcrypt hash transfer
         password = (bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt())).decode('utf-8')
         cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
         cursor.execute('INSERT INTO `user` (`username`, `password`, `email`) VALUES (%s, %s, %s)',
@@ -58,7 +57,13 @@ class User():
 
 
 class Post():
-    def get_Posts_title(user_id):
+    def get_Posts_All():
+        cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+        cursor.execute('SELECT post.id, post.title, post.regdate, user.username FROM post JOIN user ON user.id = post.user_id')
+        posts = cursor.fetchall()
+        return posts
+
+    def get_Posts_With_Userid(user_id):
         cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
         cursor.execute('SELECT * FROM post WHERE user_id = %s', str(user_id))
         posts = cursor.fetchall()

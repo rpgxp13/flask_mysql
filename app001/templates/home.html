@@ -5,10 +5,13 @@
 {% block content %}
     <h2>Home Page</h2>
     <p>Welcome back, {{ username }}!</p>
-    {% for post in posts %}
-        <a href="{{ url_for('postviewer', id=post['id']) }}">
-            <p>{{ post['title'] }}</p>
-        </a>
-
-    {% endfor %}
+    <div>
+        <table>
+        {% for post in posts %}
+            <tr>
+                <td><a href="{{ url_for('postviewer', id=post['id']) }}">{{ post['title'] }}</a></td>
+            </tr>
+        {% endfor %}
+        </table>
+    </div>
 {% endblock %}
